@@ -11,22 +11,33 @@
 //Global Variables
 var searchBtn = $(".searchBtn");
 var cityName;
+var apikey = "4846f5792a31d91f265afac91672a4b8";
+var mainTemp = $(".temp")
+var mainWind = $(".wind")
+var mainHum = $(".humidity")
 
 
 //Calling the API
-function getAPI() {
-     var apiUrl = "api.openweathermap.org/data/2.5/weather?q="+cityName+"&appid=4846f5792a31d91f265afac91672a4b8";
+function getAPI(location) {
+     var apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=imperial&appid=${apikey}`; 
+                
     fetch(apiUrl)
         .then(function (response) {
                 return response.json();
-         })
+        })
         .then(function (data) {
-                console.log(data);
+            // console.log(data.wind.speed);
+            // console.log(data.main.temp);
+            // console.log(data.main.humidity);
+            mainTemp.text(data.main.temp);
+            mainWind.text(data.wind.speed + "mph");
+            mainHum.text(data.main.humidity);
+
         });
         
 }
 
-
+//Displaying fetched data
 function displayData() {
 
 }
@@ -34,6 +45,8 @@ function displayData() {
 //Search Button
 searchBtn.on("click", function(){
     cityName = $(".searchBar").val()
+    localStorage.setItem("city-history", cityName)
+    console.log(cityName)
         
     getAPI()
     })
