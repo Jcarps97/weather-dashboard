@@ -17,11 +17,12 @@ var mainTemp = $(".temp")
 var mainWind = $(".wind")
 var mainHum = $(".humidity")
 var currentDay = moment()
+var searchedCity = $(".cityName")
 
 
 //Calling the API
-function getAPI(location) {
-    var apiUrl1 = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=imperial&appid=${apikey}`; 
+function getAPI(city) {
+    var apiUrl1 = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apikey}`; 
                 
     fetch(apiUrl1)
         .then(function (response) {
@@ -31,8 +32,8 @@ function getAPI(location) {
             // console.log(data)
             var lat = data.coord.lat
             var long = data.coord.lon
-            console.log(lat)
-            console.log(long)
+            // console.log(lat)
+            // console.log(long)
         
 
 
@@ -50,27 +51,51 @@ function displayData(lat, long) {
     })
     .then(function (data) {
         console.log(data)
-            mainTemp.text("Temperature " + data.current.temp + " F");
-            mainWind.text("Wind " + data.current.wind_speed + "mph");
-            mainHum.text("Humidity " + data.current.humidity + "%");
-            mainUVI.text("UV Index " + data.current.uvi);
-        $(".forecast").each(function(index){
-            text(data.daily[i].current.temp + "F")
-            text(data.daily[i].current.wind_speed + "mph")
-            text(data.daily[i].current.humidity + "%")
-        });
+            searchedCity.text(cityName)
+                mainTemp.text("Temperature " + data.current.temp + " F");
+                mainWind.text("Wind " + data.current.wind_speed + "mph");
+                mainHum.text("Humidity " + data.current.humidity + "%");
+                mainUVI.text("UV Index " + data.current.uvi);
 
+    forecast(data.daily);
     });
+
+}
+
+
+function forecast (data) {
+    for( i = 0; i < 5; i++) {
+        var forecastContainer = $("<div>")
+            forecastContainer.addClass("container")
+        var forecastTemp = $("<div>");
+            forecastTemp.text(data[i].temp.day + " F");
+                forecastContainer.append(forecastTemp);
+        var forecastWind = $("<div>");
+            forecastWind.text(data[i].wind_speed + " Mph");
+                forecastContainer.append(forecastWind);
+        var forecastHumid = $("<div>");
+            forecastHumid.text(data[i].humidity + " %");
+                forecastContainer.append(forecastHumid);
+    $(".forecast").append(forecastContainer) 
+    }
+
 
 }
 
 //Search Button
 searchBtn.on("click", function(){
     cityName = $(".searchBar").val()
-    localStorage.setItem("city-history", cityName)
-    console.log(cityName)
-        
-    getAPI()
-    })
+    localStorage.setItem("city-history", cityName)    
+        getAPI(cityName)
+    var historyButton = $("<button>")
+        historyButton.text(cityName)
+            $(".history").append(historyButton)
+    historyButton.on("click", function(event) {
+            var selectedHistory = event.target.textContent;
+                getAPI(selectedHistory);
+    });
+});
 
 $(".currentDay").text(currentDay)
+
+// localStorage.getItem("city-history")

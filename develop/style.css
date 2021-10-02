@@ -1,6 +1,26 @@
-.currentDay {
+.results {
     text-align: center;
+    border-style: solid;
 }
+
+.history {
+    border-style: solid;
+}
+
+.forecast {
+    border-style: solid;
+}
+
+.currentDay {
+    border-style: solid;
+}
+
+.forecast {
+    display:flex;
+
+
+}
+
 
 /* .temp {
     text-align: center;
