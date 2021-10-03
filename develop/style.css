@@ -1,10 +1,18 @@
+body {
+    background-color: teal;
+}
+
 .results {
     text-align: center;
     border-style: solid;
+    background-color: blueviolet;
+    color: white;
 }
 
 .history {
     border-style: solid;
+    background-color: green;
+    color:white;
 }
 
 .forecast {
@@ -13,12 +21,14 @@
 
 .currentDay {
     border-style: solid;
+    background-color: black;
+    color: white;
 }
 
 .forecast {
     display:flex;
-
-
+    background-color: darkmagenta;
+    color: white;
 }
 
 

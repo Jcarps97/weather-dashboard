@@ -18,6 +18,7 @@ var mainWind = $(".wind")
 var mainHum = $(".humidity")
 var currentDay = moment()
 var searchedCity = $(".cityName")
+var weatherIcon = $(".iconSpan")
 
 
 //Calling the API
@@ -52,6 +53,8 @@ function displayData(lat, long) {
     .then(function (data) {
         console.log(data)
             searchedCity.text(cityName)
+            var weatherCode = data.current.weather[0].icon;
+                weatherIcon.src = "http://openweathermap.org/img/wn/" + weatherCode + "@2x.png";
                 mainTemp.text("Temperature " + data.current.temp + " F");
                 mainWind.text("Wind " + data.current.wind_speed + "mph");
                 mainHum.text("Humidity " + data.current.humidity + "%");
@@ -68,18 +71,19 @@ function forecast (data) {
         var forecastContainer = $("<div>")
             forecastContainer.addClass("container")
         var forecastTemp = $("<div>");
+            // forecastTemp.empty();
             forecastTemp.text(data[i].temp.day + " F");
                 forecastContainer.append(forecastTemp);
         var forecastWind = $("<div>");
+            // forecastWind.empty();
             forecastWind.text(data[i].wind_speed + " Mph");
                 forecastContainer.append(forecastWind);
         var forecastHumid = $("<div>");
+            // forecastHumid.empty();
             forecastHumid.text(data[i].humidity + " %");
                 forecastContainer.append(forecastHumid);
-    $(".forecast").append(forecastContainer) 
+    $(".forecast").append(forecastContainer)
     }
-
-
 }
 
 //Search Button
@@ -87,13 +91,13 @@ searchBtn.on("click", function(){
     cityName = $(".searchBar").val()
     localStorage.setItem("city-history", cityName)    
         getAPI(cityName)
-    var historyButton = $("<button>")
-        historyButton.text(cityName)
-            $(".history").append(historyButton)
-    historyButton.on("click", function(event) {
-            var selectedHistory = event.target.textContent;
-                getAPI(selectedHistory);
-    });
+    // var historyButton = $("<button>")
+    //     historyButton.text(cityName)
+    //         $(".history").append(historyButton)
+    // historyButton.on("click", function(event) {
+    //         var selectedHistory = event.target.textContent;
+    //             getAPI(selectedHistory);
+    // });
 });
 
 $(".currentDay").text(currentDay)
