@@ -52,6 +52,7 @@ function displayData(lat, long) {
     })
     .then(function (data) {
         console.log(data)
+        console.log(data.current.dt)
             searchedCity.text(cityName)
             var weatherCode = data.current.weather[0].icon;
                 weatherIcon.src = "http://openweathermap.org/img/wn/" + weatherCode + "@2x.png";
@@ -70,6 +71,9 @@ function forecast (data) {
     for( i = 0; i < 5; i++) {
         var forecastContainer = $("<div>")
             forecastContainer.addClass("container")
+        // var forecastTime = $("<div>");
+        //     forecastTime.text(data[i].dt);
+        //         forecastContainer.append(forecastTime);
         var forecastTemp = $("<div>");
             // forecastTemp.empty();
             forecastTemp.text(data[i].temp.day + " F");
