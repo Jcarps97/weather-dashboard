@@ -68,6 +68,7 @@ function displayData(lat, long) {
 
 
 function forecast (data) {
+    $(".forecast").empty();
     for( i = 0; i < 5; i++) {
         var forecastContainer = $("<div>")
             forecastContainer.addClass("container")
@@ -75,35 +76,47 @@ function forecast (data) {
         //     forecastTime.text(data[i].dt);
         //         forecastContainer.append(forecastTime);
         var forecastTemp = $("<div>");
-            // forecastTemp.empty();
             forecastTemp.text(data[i].temp.day + " F");
                 forecastContainer.append(forecastTemp);
         var forecastWind = $("<div>");
-            // forecastWind.empty();
             forecastWind.text(data[i].wind_speed + " Mph");
                 forecastContainer.append(forecastWind);
         var forecastHumid = $("<div>");
-            // forecastHumid.empty();
             forecastHumid.text(data[i].humidity + " %");
                 forecastContainer.append(forecastHumid);
     $(".forecast").append(forecastContainer)
     }
 }
 
+function retrieveHistory() {
+    var localArray = JSON.parse(localStorage.getItem("city-history")) || [];
+    for (i = 0; i < localArray.length; i++) {
+        var historyButton = $("<button>")
+        historyButton.text(localArray[i])
+            $(".history").append(historyButton)
+    historyButton.on("click", function(event) {
+            var selectedHistory = event.target.textContent;
+                getAPI(selectedHistory);
+            });
+    };
+}
+
 //Search Button
 searchBtn.on("click", function(){
-    cityName = $(".searchBar").val()
-    localStorage.setItem("city-history", cityName)    
+    var cityArray = JSON.parse(localStorage.getItem("city-history")) || [];
+    cityName = $(".searchBar").val();
+    cityArray.push(cityName);
+    localStorage.setItem("city-history", JSON.stringify(cityArray))   
         getAPI(cityName)
-    // var historyButton = $("<button>")
-    //     historyButton.text(cityName)
-    //         $(".history").append(historyButton)
-    // historyButton.on("click", function(event) {
-    //         var selectedHistory = event.target.textContent;
-    //             getAPI(selectedHistory);
-    // });
+    var historyButton = $("<button>")
+        historyButton.text(cityName)
+            $(".history").append(historyButton)
+    historyButton.on("click", function(event) {
+            var selectedHistory = event.target.textContent;
+                getAPI(selectedHistory);
+    });
 });
 
 $(".currentDay").text(currentDay)
 
-// localStorage.getItem("city-history")
+retrieveHistory();
